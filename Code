@@ -1,0 +1,82 @@
+import React, { Component } from 'react';
+import { StyleSheet, Text, View,ImageBackground, Modal, TouchableOpacity } from 'react-native';
+import CountDown from 'react-native-countdown-component';
+import moment from 'moment';
+import Snow from 'react-native-snow';
+import Sound from 'react-native-sound';
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      totalDuration: 0,
+    };
+  }
+  componentDidMount() {
+    var that = this;
+    var date =moment()
+    .utcOffset('+07:00')
+    .format('YYYY-MM-DD HH:MM:SS'); 
+    var expirydate = '2019/12/25 00:00:00 ';
+    var diffr = moment.duration(moment(expirydate).diff(moment(date)));
+    var hours = parseInt(diffr.asHours());
+    var minutes = parseInt(diffr.minutes());
+    var seconds = parseInt(diffr.seconds());
+    var d = hours * 60 * 60 + minutes * 60 + seconds;
+    that.setState({ totalDuration: d });
+  }
+
+  sound = new Sound('we_wish_you_a_merry_christmas.mp3');
+  playSound = () => {
+    this.sound.play()
+  }
+
+  render() {
+    console.log(this.state.totalDuration);
+    return (
+      <View style={{ flex: 1, justifyContent: 'center' }}>
+
+        <ImageBackground 
+          source={ require('./snow.jpg') } 
+          style={ styles.background}>
+        </ImageBackground>
+
+
+        <Text style={styles.mau}>Chrismas Eve is coming soon</Text>
+
+        <CountDown
+          until={this.state.totalDuration}
+          timetoShow={('H', 'M', 'S')}
+          onFinish={() => alert('Giáng sinh vui vẻ')
+          }
+          size={20}
+        />
+
+        <Snow />
+
+        <TouchableOpacity onPress={this.playSound}>
+                    <View>
+                        <Text style={styles.music}>Start music</Text>
+                    </View>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+}
+const styles = StyleSheet.create({
+  background:{
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0, 
+  },
+  mau: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    left: 50
+  },
+  music: {
+    left: 170,
+    fontWeight: 'bold',
+  },
+});
