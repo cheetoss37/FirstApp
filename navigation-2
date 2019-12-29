@@ -1,0 +1,46 @@
+import React, { Component } from 'react';
+import { 
+  AppRegistry, 
+  StyleSheet, 
+  Text,  
+  View,
+  } from 'react-native';
+import { WebView } from 'react-native-webview';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+
+export default class Home extends Component {
+    static navigationOptions = {
+      title: 'Home',
+    };
+
+    option1 = () =>{
+        this.props.navigation.navigate(
+            'Browser',
+            { url: 'https://google.com'}
+        )
+    }
+    render(){
+        return(
+        <View style={{ flex: 1, justifyContent: 'center' }}>
+
+            <Text style={styles.Link}>Link:</Text>
+            <TouchableOpacity onPress={this.option1}>
+                <Text style={styles.Link}> Link to Youtube</Text>
+            </TouchableOpacity>
+            
+            <Text style={styles.Link}>Weather API:</Text>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('Weather')}>
+                <Text style={styles.Link}> OpenWeatherMap API Data </Text>
+            </TouchableOpacity>
+
+        </View>
+        )
+    }
+}
+
+const styles = StyleSheet.create({
+    Link:{
+        textAlign: 'center',
+        fontWeight: 'bold'
+    }
+});
