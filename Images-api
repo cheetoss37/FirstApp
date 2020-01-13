@@ -1,0 +1,68 @@
+import React, { Component } from 'react';
+import { 
+  StyleSheet, 
+  Text, 
+  View,
+  Image,
+  FlatList,
+  ActivityIndicator
+} from 'react-native';
+export default class App extends Component {
+  constructor(props){
+    super(props);
+    this.state ={ 
+      isLoading: true,
+      dataSource: []
+    }
+  }
+  componentDidMount(){
+    const url= 'https://pixabay.com/api/?key=14866279-02c2c99dd5e601b4e49215ab7&q=yellow+flowers&image_type=photo&pretty=true'
+    fetch(url)
+      .then((response) => response.json())
+      .then((responseJson) => {
+          this.setState({
+            isLoading: false,
+            dataSource: responseJson.hits
+          })
+      })
+      .catch((error) =>{
+        console.error(error);
+      });
+  }
+  renderItem = ({item}) => {
+    return(
+      <View>
+      <Image
+        style={{width: 200, height: 200}}
+        source = {{ uri: item.largeImageURL}}
+      />
+    </View>
+    )
+  }
+    render() {
+      if(this.state.isLoading){
+        return(
+          <View style={{flex: 1, padding: 20}}>
+            <ActivityIndicator/>
+          </View>
+        )
+      }
+      return (
+          <View style={styles.Container}>
+          <FlatList
+          data={this.state.dataSource}
+          renderItem={this.renderItem}
+          keyExtractor={(item, index) => index.toString()}
+        />
+          </View>       
+      );
+    }
+   }
+
+const styles = StyleSheet.create({
+  Container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
